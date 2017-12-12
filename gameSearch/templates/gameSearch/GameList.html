@@ -1,0 +1,56 @@
+{% extends 'gameSearch/Header.html' %}
+{% block title %}
+    Gamebase
+{% endblock %}
+{% block userArea %}
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-left nav-collapse">
+            <li>
+                <a>
+                    <span class="glyphicon" aria-hidden="true"></span>Hello, {{ user.first_name }}
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">
+                    <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
+                </a>
+            </li>
+        </ul>
+        <form id="searchForm" name="searchForm"class="navbar-form navbar-right" onsubmit="return formSubmit()">
+           <div class="form-group">
+            <input class="form-control autocomplete" value="{{  request.GET.q }}" id="search" placeholder="Search here..." name="q" >
+          </div>
+          <button type="submit" class="btn-default btn">Search</button>
+        </form>
+    </div>
+{% endblock %}
+{% load staticfiles %}
+{% block body %}
+    <div class="container">
+        <div id="result-holder" class="row">
+            <div class="col-md-3">
+                <div>
+                    <a class="list-group-item active list-group-item-info">Gaming Platform :  </a>
+                    <ul class="list-group">
+                         {% for platform in platforms %}
+                        <li class="list-group-item"> {{ platform.platform }}
+                            <span class="label pull-right">
+                                    <input type="checkbox" form="searchForm"  onchange="return formSubmit()"  name="platforms" value="{{ platform.platform }}" {% if platform_filter %}{% if platform.platform in platform_filter %}checked{% endif %}{% endif %}>
+                            </span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div>
+                    <a class="list-group-item active list-group-item-danger">Sort by score :  </a>
+                     <ul class="list-group">
+                         <li  class="list-group-item"><a><label><input form="searchForm"  type="radio" name="score" value="dsc"  onchange="return formSubmit()"   checked="checked"> Descending</label></a></li>
+                         <li  class="list-group-item"><a><label><input form="searchForm" type="radio" name="score" value="asc"  onchange="return formSubmit()" {% if request.GET.score == 'asc' %} checked="checked"{% endif %}> Ascending</label></a></li>
+                     </ul>
+                </div>
+            </div>
+            {% include  'gameSearch/SearchResults.html' %}
+        </div>
+    </div>
+    <script src="{% static 'gameSearch/javascript/Search.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<div class="col-md-9 results">
+        <div class="row">
+            {% if games %}
+                {%  for game in games %}
+                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
+                        {% if game.editors_choice == 'y' or  game.editors_choice == 'Y' %}
+                            <div class="offer-text2">Editors Choice</div>
+                        {% endif %}
+                        <div class="thumbnail product-box">
+                            <img src="{% static 'gameSearch/images/accelGame.jpg' %}" alt="">
+                            <div class="caption">
+                                <h3><a href="#">{{ game.title }} </a></h3>
+                                <p>Score : <strong>{{ game.score }}</strong>  </p>
+                                <p><a><strong>Platform : </strong>{{ game.platform }} </a></p>
+                                <p><strong>Genre : </strong>{{ game.genre }}  </p>
+                                <div id="fav_{{ game.id }}">
+                                    {% if  game.id|stringformat:"i" in favourites %}
+                                        <p>Added to favourites</p>
+                                    {% else %}
+                                        <a onclick="return favourite({{ game.id }})" class="btn btn-primary" role="button">Add to favourites</a></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                    <h2 class="not-found" >Sorry, could not find the game you searched for.</h2>
+            {% endif %}
+        </div>
+    </div>
+     {% if games.has_other_pages %}
+        <div class="row results">
+            <ul class="pagination alg-right-pad">
+                {% if games.has_previous %}
+                    <li><a href="#" onclick="return formSubmit({{ games.previous_page_number }})" >&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in games.paginator.page_range %}
+                      {% if games.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                          {% else %}
+                            <li><a href="#" onclick="return formSubmit({{ i }})" >{{ i }}</a></li>
+                      {% endif %}
+                {% endfor %}
+                {% if games.has_next %}
+                      <li><a href="#" onclick="return formSubmit({{ games.next_page_number }})">&raquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+             </ul>
+        </div>
+    {% endif %}
+</div>
+{% csrf_token %}

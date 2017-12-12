@@ -1,0 +1,66 @@
+{% extends 'gameSearch/Header.html' %}
+{% block title %}
+    Sign in
+{% endblock %}
+{% block userArea %}
+<form name="searchForm"class="navbar-form navbar-right" method="POST" action="{% url 'login' %}">
+{% csrf_token %}
+    <div class="form-group">
+        <input {% if error_message %}style="border: 2px solid #cc4242" data-placement="bottom" data-toggle="tooltip" title="{{ error_message }}" {% endif %} type="text" class="form-control" name="username" placeholder="nickname" required>
+        <input {% if error_message %}style="border: 2px solid #cc4242" data-placement="bottom" data-toggle="tooltip" title="{{ error_message }}" {% endif %} type="password" class="form-control"type="password" class="form-control" name="password"  placeholder="password" required>
+    </div>
+    <button type="submit" class="btn btn-default">Login</button>
+</form>
+{% endblock %}
+{% block body %}
+<div class="container">
+        <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h3 class="panel-title">Please sign up for Almabase Gamebase</h3>
+			 			</div>
+			 			<div class="panel-body">
+                            {% if form.errors %}
+                                <div class="alert alert-error">
+                                    {% for field in form %}
+                                        {% if field.errors %}
+                                        <li>A user with that nickname already exists.</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+			    		<form role="form" method="POST" action="{% url 'registration' %}" data-toggle="validator" oninput="password_confirmation.setCustomValidity(password_confirmation.value != password.value ? 'Passwords do not match.' : '')">
+                            {% csrf_token %}
+			    			<div class="row">
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			                <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name" required>
+			    					</div>
+			    				</div>
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input  type="text" name="username" id="id_username" class="form-control input-sm" placeholder="Nickname e.g. 'Rambo'" required>
+			    					</div>
+			    				</div>
+			    			</div>
+			    			<div class="row">
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input type="password" name="password" id="id_password" class="form-control input-sm" placeholder="Password" required>
+			    					</div>
+			    				</div>
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input type="password" data-match="#id_password" name="password_confirmation" id="id_password_confirmation" class="form-control input-sm" placeholder="Confirm Password" data-match-error="Whoops, these don't match" placeholder="Confirm" required>
+			    					</div>
+			    				</div>
+			    			</div>
+			    			<input type="submit" value="Register" class="btn btn-info btn-block">
+			    		</form>
+			    	</div>
+	    		</div>
+    		</div>
+    	</div>
+    </div>
+{% endblock %}
